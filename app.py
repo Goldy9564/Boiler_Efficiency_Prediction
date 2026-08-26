@@ -1,12 +1,19 @@
 import streamlit as st
 import pandas as pd
 import joblib
+from pathlib import Path
 
-# Load model
+BASE_DIR = Path(__file__).resolve().parent
 
-model = joblib.load(
-    "models/boiler_efficiency_model.pkl"
-)
+MODEL_PATH = BASE_DIR / "boiler_efficiency_model.pkl"
+
+if not MODEL_PATH.exists():
+    st.error(f"Model not found: {MODEL_PATH}")
+    st.write("Available files:")
+    st.write([x.name for x in BASE_DIR.iterdir()])
+    st.stop()
+
+model = joblib.load(MODEL_PATH)
 
 
 # Page title
